@@ -1,20 +1,10 @@
 import '../resources/repository.dart';
 import 'package:rxdart/rxdart.dart';
 import '../models/item_model.dart';
-import 'package:inject/inject.dart';
-import 'bloc_base.dart';
 
-class MoviesBloc extends BlocBase {
-
-  final Repository _repository;
-  PublishSubject<ItemModel> _moviesFetcher;
-
-  @provide
-  MoviesBloc(this._repository);
-
-  init(){
-    _moviesFetcher = PublishSubject<ItemModel>();
-  }
+class MoviesBloc {
+  final _repository = Repository();
+  final _moviesFetcher = PublishSubject<ItemModel>();
 
   Observable<ItemModel> get allMovies => _moviesFetcher.stream;
 
@@ -23,8 +13,9 @@ class MoviesBloc extends BlocBase {
     _moviesFetcher.sink.add(itemModel);
   }
 
-  @override
   dispose() {
     _moviesFetcher.close();
   }
 }
+
+final bloc = MoviesBloc();
